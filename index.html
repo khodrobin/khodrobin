@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>خودروبین | بانک اطلاعات خودرو و موتورسیکلت</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, 'Segoe UI', Tahoma, sans-serif; background: #f4f6f9; direction: rtl; color: #1e293b; }
+.main-header { background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; padding: 16px 24px; transition: all 0.3s ease; }
+.header-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.logo { font-size: 1.6rem; font-weight: 800; color: #1e293b; transition: transform 0.3s ease; }
+.logo:hover { transform: scale(1.05); }
+.logo span { color: #2563eb; }
+.search-box { flex: 1; max-width: 380px; }
+.search-box input { width: 100%; padding: 10px 18px; border-radius: 32px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 0.9rem; transition: all 0.3s ease; }
+.search-box input:focus { outline: none; border-color: #2563eb; background: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
+.nav-tabs { background: white; border-bottom: 1px solid #e9eef3; padding: 0 24px; }
+.nav-tabs-content { max-width: 1400px; margin: 0 auto; display: flex; gap: 32px; }
+.nav-tab { padding: 14px 0; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease; color: #475569; position: relative; }
+.nav-tab:hover { color: #2563eb; }
+.nav-tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+.nav-tab::after { content: ''; position: absolute; bottom: -3px; right: 0; width: 0; height: 3px; background: #2563eb; transition: width 0.3s ease; }
+.nav-tab.active::after { width: 100%; }
+.brands-bar { background: white; padding: 12px 24px; border-bottom: 1px solid #e9eef3; overflow-x: auto; white-space: nowrap; scroll-behavior: smooth; }
+.brands-bar::-webkit-scrollbar { height: 4px; }
+.brands-bar::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
+.brands-container { max-width: 1400px; margin: 0 auto; display: inline-flex; gap: 10px; flex-wrap: wrap; }
+.brand-btn { padding: 6px 16px; border-radius: 30px; background: #f1f5f9; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; display: inline-block; margin: 3px; border: none; }
+.brand-btn:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 4px 12px rgba(37,99,235,0.25); background: #2563eb; color: white; }
+.brand-btn.active { background: #2563eb; color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.main-content { max-width: 1400px; margin: 32px auto; padding: 0 24px; }
+.vehicles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.vehicle-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 1px solid #edf2f7; position: relative; }
+.vehicle-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15); border-color: #2563eb; }
+.card-image { height: 200px; overflow: hidden; background: linear-gradient(145deg, #f1f5f9, #e2e8f0); display: flex; align-items: center; justify-content: center; position: relative; }
+.card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.vehicle-card:hover .card-image img { transform: scale(1.08); }
+.card-image::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(transparent, rgba(0,0,0,0.05)); }
+.card-info { padding: 20px; transition: all 0.3s ease; }
+.card-brand { display: inline-block; background: #eef2ff; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: #1e40af; margin-bottom: 12px; transition: all 0.3s ease; }
+.vehicle-card:hover .card-brand { background: #2563eb; color: white; }
+.card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; transition: color 0.3s ease; }
+.vehicle-card:hover .card-title { color: #2563eb; }
+.card-flag { font-size: 1.2rem; margin-right: 5px; }
+.card-specs { display: flex; gap: 16px; font-size: 0.8rem; color: #475569; margin: 14px 0; flex-wrap: wrap; }
+.card-specs span { background: #f1f5f9; padding: 4px 10px; border-radius: 20px; transition: all 0.3s ease; }
+.vehicle-card:hover .card-specs span { background: #eef2ff; }
+.card-desc { font-size: 0.85rem; color: #475569; line-height: 1.45; }
+.compare-btn { margin-top: 16px; width: 100%; background: #f1f5f9; border: none; padding: 8px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: #1e293b; }
+.compare-btn:hover { background: #2563eb; color: white; transform: scale(1.02); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.compare-btn:active { transform: scale(0.95); }
+.compare-panel { position: fixed; bottom: 0; left: 0; right: 0; background: white; box-shadow: 0 -8px 25px rgba(0,0,0,0.1); border-top: 1px solid #e2e8f0; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; padding: 16px 24px; }
+.compare-panel.active { transform: translateY(0); }
+.compare-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.compare-items { display: flex; gap: 20px; flex-wrap: wrap; flex: 1; }
+.compare-item-card { background: #f8fafc; border-radius: 24px; padding: 10px 16px; width: 200px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.remove-compare { background: #fee2e2; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #dc2626; transition: all 0.3s ease; }
+.remove-compare:hover { background: #dc2626; color: white; transform: rotate(90deg); }
+.compare-action-btn { background: #2563eb; color: white; border: none; padding: 10px 28px; border-radius: 40px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.compare-action-btn:hover:not(:disabled) { background: #1d4ed8; transform: scale(1.05); box-shadow: 0 4px 15px rgba(37,99,235,0.4); }
+.compare-action-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+.compare-action-btn:active:not(:disabled) { transform: scale(0.95); }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 300; justify-content: center; align-items: center; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal.active { display: flex; }
+.modal-content { background: white; max-width: 1100px; width: 90%; max-height: 85vh; border-radius: 32px; overflow-y: auto; direction: rtl; padding: 24px; animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.compare-table { width: 100%; border-collapse: collapse; }
+.compare-table th, .compare-table td { padding: 14px 12px; border-bottom: 1px solid #e9eef3; text-align: right; vertical-align: top; transition: all 0.3s ease; }
+.compare-table tr:hover td { background: #f8fafc; }
+.compare-table th { background: #f8fafc; font-weight: 700; width: 140px; }
+.detail-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 400; justify-content: center; align-items: center; padding: 20px; animation: fadeIn 0.3s ease; }
+.detail-modal.active { display: flex; }
+.detail-content { background: white; border-radius: 32px; max-width: 950px; width: 100%; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+.detail-header { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 25px; text-align: center; border-radius: 32px 32px 0 0; }
+.detail-header img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 15px; border: 3px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.3s ease; }
+.detail-header img:hover { transform: scale(1.05); }
+.detail-flag { font-size: 2.5rem; margin-bottom: 5px; }
+.detail-name { font-size: 1.8rem; font-weight: 800; margin: 8px 0; }
+.detail-brand { color: #94a3b8; }
+.detail-body { padding: 28px; }
+.specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; margin-bottom: 28px; }
+.spec-item { background: #f8fafc; padding: 16px; border-radius: 20px; border-right: 4px solid #2563eb; transition: all 0.3s ease; }
+.spec-item:hover { transform: translateX(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.spec-label { font-size: 0.75rem; color: #64748b; margin-bottom: 5px; }
+.spec-value { font-weight: 700; font-size: 0.95rem; }
+.options-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #ffffff; border-radius: 20px; overflow: hidden; }
+.options-table th { background: #1e293b; color: white; padding: 12px; }
+.options-table td { padding: 10px 12px; border-bottom: 1px solid #eef2ff; transition: all 0.3s ease; }
+.options-table tr:hover td { background: #f8fafc; }
+.full-specs { background: #fefce8; border-radius: 20px; padding: 20px; white-space: pre-line; font-size: 0.85rem; line-height: 1.7; transition: all 0.3s ease; }
+.full-specs:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.close-btn { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; margin-top: 20px; cursor: pointer; width: 220px; display: block; text-align: center; margin-left: auto; margin-right: auto; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.close-btn:hover { background: #1d4ed8; transform: scale(1.05); box-shadow: 0 4px 15px rgba(37,99,235,0.3); }
+.close-btn:active { transform: scale(0.95); }
+.footer { background: white; text-align: center; padding: 20px; font-size: 0.75rem; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 40px; }
+.stats-bar { background: linear-gradient(135deg, #2563eb, #1e40af); color: white; padding: 12px 24px; text-align: center; font-size: 0.85rem; transition: all 0.3s ease; }
+.wiki-badge { background: #22c55e; color: white; font-size: 10px; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-right: 8px; transition: all 0.3s ease; }
+.vehicle-card:hover .wiki-badge { background: #16a34a; transform: scale(1.05); }
+@media (max-width: 700px) { .vehicles-grid { grid-template-columns: 1fr; } .compare-item-card { width: 100%; } .brands-container { flex-wrap: wrap; white-space: normal; } }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; transition: all 0.3s ease; }
+::-webkit-scrollbar-thumb:hover { background: #1d4ed8; }
+</style>
+</head>
+<body>
+
+<div class="main-header">
+<div class="header-content">
+<div class="logo">خودرو<span>بین</span></div>
+<div class="search-box"><input type="text" id="searchInput" placeholder="جستجوی برند، مدل یا مشخصات فنی..."></div>
+</div>
+</div>
+
+<div class="nav-tabs">
+<div class="nav-tabs-content">
+<div class="nav-tab active" data-type="car">خودروها</div>
+<div class="nav-tab" data-type="motorcycle">موتورسیکلت‌ها</div>
+</div>
+</div>
+
+<div class="brands-bar"><div class="brands-container" id="brandsContainer"></div></div>
+
+<div class="stats-bar" id="statsBar">بارگذاری اطلاعات...</div>
+
+<div class="main-content"><div class="vehicles-grid" id="vehiclesGrid"></div></div>
+
+<div class="footer" id="footer"></div>
+
+<div id="comparePanel" class="compare-panel">
+<div class="compare-inner">
+<div class="compare-items" id="compareItemsList"></div>
+<button id="compareFinalBtn" class="compare-action-btn" disabled>مقایسه حرفه‌ای</button>
+</div>
+</div>
+
+<div id="compareModal" class="modal">
+<div class="modal-content">
+<h3 style="margin-bottom: 20px;">مقایسه دقیق</h3>
+<div id="compareTable"></div>
+<button class="close-btn" onclick="closeCompareModal()" style="background:#475569;">بستن</button>
+</div>
+</div>
+
+<div id="detailModal" class="detail-modal"><div class="detail-content" id="detailContent"></div></div>
+
+<script>
+// ============================================================
+// ==================== نسخه نهایی (اصلاح‌شده) ====================
+// ============================================================
+
+function getImg(model) {
+    const images = {
+        "سمند":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Iran_Khodro_Samand.jpg/640px-Iran_Khodro_Samand.jpg",
+        "دنا":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Iran_Khodro_Dena.jpg/640px-Iran_Khodro_Dena.jpg",
+        "رانا":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Iran_Khodro_Runna.jpg/640px-Iran_Khodro_Runna.jpg",
+        "پژو ۲۰۶":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Peugeot_206_HDi.JPG/640px-Peugeot_206_HDi.JPG",
+        "پژو ۲۰۷":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Peugeot_207_GT_%28cropped%29.jpg/640px-Peugeot_207_GT_%28cropped%29.jpg",
+        "تارا":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Iran_Khodro_Tara.jpg/640px-Iran_Khodro_Tara.jpg",
+        "پراید":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Saipa_Pride_%28front%29.jpg/640px-Saipa_Pride_%28front%29.jpg",
+        "تیبا":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Saipa_Tiba.jpg/640px-Saipa_Tiba.jpg",
+        "ساینا":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Saipa_Saina.jpg/640px-Saipa_Saina.jpg",
+        "کوییک":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Saipa_Quick.jpg/640px-Saipa_Quick.jpg",
+        "شاهین":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Saipa_Shahin.jpg/640px-Saipa_Shahin.jpg",
+        "ریسپکت":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Bahman_Respect.jpg/640px-Bahman_Respect.jpg",
+        "فیدلیتی":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Bahman_Fidelity.jpg/640px-Bahman_Fidelity.jpg",
+        "X5":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BMW_X5_%28G05%29_IMG_6204.jpg/640px-BMW_X5_%28G05%29_IMG_6204.jpg",
+        "X3":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/BMW_X3_%28G01%29_IMG_6200.jpg/640px-BMW_X3_%28G01%29_IMG_6200.jpg",
+        "M3":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/BMW_M3_%28G80%29_IMG_6207.jpg/640px-BMW_M3_%28G80%29_IMG_6207.jpg",
+        "C200":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Mercedes-Benz_W206_IMG_6190.jpg/640px-Mercedes-Benz_W206_IMG_6190.jpg",
+        "S500":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Mercedes-Benz_S-Class_%28W223%29_IMG_6192.jpg/640px-Mercedes-Benz_S-Class_%28W223%29_IMG_6192.jpg",
+        "GLC":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Mercedes-Benz_GLC_%28X254%29_IMG_6220.jpg/640px-Mercedes-Benz_GLC_%28X254%29_IMG_6220.jpg",
+        "G-Wagon":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Mercedes-Benz_G_Class_%28W465%29_IMG_6226.jpg/640px-Mercedes-Benz_G_Class_%28W465%29_IMG_6226.jpg",
+        "A3":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Audi_A3_8Y_IMG_6167.jpg/640px-Audi_A3_8Y_IMG_6167.jpg",
+        "A4":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Audi_A4_%28B9%29_IMG_6175.jpg/640px-Audi_A4_%28B9%29_IMG_6175.jpg",
+        "Q5":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Audi_Q5_%28FY%29_IMG_6179.jpg/640px-Audi_Q5_%28FY%29_IMG_6179.jpg",
+        "R8":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Audi_R8_%28Type_4S%29_IMG_6185.jpg/640px-Audi_R8_%28Type_4S%29_IMG_6185.jpg",
+        "کمری":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Toyota_Camry_XV70_IMG_6230.jpg/640px-Toyota_Camry_XV70_IMG_6230.jpg",
+        "کرولا":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Toyota_Corolla_E210_IMG_6240.jpg/640px-Toyota_Corolla_E210_IMG_6240.jpg",
+        "لندکروزر":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Toyota_Land_Cruiser_300_IMG_6250.jpg/640px-Toyota_Land_Cruiser_300_IMG_6250.jpg",
+        "سوپرا":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Toyota_Supra_%28DB40%29_IMG_6260.jpg/640px-Toyota_Supra_%28DB40%29_IMG_6260.jpg",
+        "آلتیما":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Nissan_Altima_2020.jpg/640px-Nissan_Altima_2020.jpg",
+        "جوک":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Nissan_Juke_2020.jpg/640px-Nissan_Juke_2020.jpg",
+        "پاترول":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Nissan_Patrol_2020.jpg/640px-Nissan_Patrol_2020.jpg",
+        "GT-R":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Nissan_GT-R_2020.jpg/640px-Nissan_GT-R_2020.jpg",
+        "مزدا ۳":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Mazda3_2020.jpg/640px-Mazda3_2020.jpg",
+        "مزدا ۶":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Mazda6_2020.jpg/640px-Mazda6_2020.jpg",
+        "CX-5":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Mazda_CX-5_2020.jpg/640px-Mazda_CX-5_2020.jpg",
+        "سانتافه":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Hyundai_Santa_Fe_2020.jpg/640px-Hyundai_Santa_Fe_2020.jpg",
+        "النترا":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Hyundai_Elantra_2020.jpg/640px-Hyundai_Elantra_2020.jpg",
+        "سوناتا":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Hyundai_Sonata_2020.jpg/640px-Hyundai_Sonata_2020.jpg",
+        "توسان":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Hyundai_Tucson_2020.jpg/640px-Hyundai_Tucson_2020.jpg",
+        "اسپورتیج":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Kia_Sportage_2020.jpg/640px-Kia_Sportage_2020.jpg",
+        "سراتو":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Kia_Cerato_2020.jpg/640px-Kia_Cerato_2020.jpg",
+        "اپتیما":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Kia_Optima_2020.jpg/640px-Kia_Optima_2020.jpg",
+        "کاین":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Porsche_Cayenne_%28E3%29_IMG_6255.jpg/640px-Porsche_Cayenne_%28E3%29_IMG_6255.jpg",
+        "پانامرا":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Porsche_Panamera_%28G2%29_IMG_6265.jpg/640px-Porsche_Panamera_%28G2%29_IMG_6265.jpg",
+        "۹۱۱":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Porsche_911_%28992%29_IMG_6270.jpg/640px-Porsche_911_%28992%29_IMG_6270.jpg",
+        "۴۸۸":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Ferrari_488_GTB_IMG_6275.jpg/640px-Ferrari_488_GTB_IMG_6275.jpg",
+        "هوراکان":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Lamborghini_Hurac%C3%A1n_IMG_6285.jpg/640px-Lamborghini_Hurac%C3%A1n_IMG_6285.jpg",
+        "اوروس":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Lamborghini_Urus_IMG_6290.jpg/640px-Lamborghini_Urus_IMG_6290.jpg",
+        "تندر":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Renault_Tondar_90.jpg/640px-Renault_Tondar_90.jpg",
+        "مگان":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Renault_Megane_2020.jpg/640px-Renault_Megane_2020.jpg",
+        "۲۰۸":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Peugeot_208_2020.jpg/640px-Peugeot_208_2020.jpg",
+        "۳۰۸":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Peugeot_308_2020.jpg/640px-Peugeot_308_2020.jpg",
+        "آریزو ۵":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Chery_Arrizo_5_2020.jpg/640px-Chery_Arrizo_5_2020.jpg",
+        "تیگو ۷":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Chery_Tiggo_7_2020.jpg/640px-Chery_Tiggo_7_2020.jpg",
+        "MG5":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/MG5_2020.jpg/640px-MG5_2020.jpg",
+        "هاوال H6":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Haval_H6_2020.jpg/640px-Haval_H6_2020.jpg",
+        "مدل ۳":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Tesla_Model_3_2020.jpg/640px-Tesla_Model_3_2020.jpg",
+        "موستانگ":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Ford_Mustang_2020.jpg/640px-Ford_Mustang_2020.jpg",
+        "رنگلر":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Jeep_Wrangler_2020.jpg/640px-Jeep_Wrangler_2020.jpg",
+        "چلنجر":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Dodge_Challenger_2020.jpg/640px-Dodge_Challenger_2020.jpg",
+        "کانتیننتال":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Bentley_Continental_GT_2020.jpg/640px-Bentley_Continental_GT_2020.jpg",
+        "فانتوم":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Rolls-Royce_Phantom_2020.jpg/640px-Rolls-Royce_Phantom_2020.jpg",
+        "ایواک":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Land_Rover_Evoque_2020.jpg/640px-Land_Rover_Evoque_2020.jpg",
+        "دیفندر":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Land_Rover_Defender_2020.jpg/640px-Land_Rover_Defender_2020.jpg",
+        "CBR":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Honda_CBR1000RR_2020.jpg/640px-Honda_CBR1000RR_2020.jpg",
+        "MT-":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Yamaha_MT-09_2021.jpg/640px-Yamaha_MT-09_2021.jpg",
+        "Ninja":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Kawasaki_Ninja_ZX-10R_2021.jpg/640px-Kawasaki_Ninja_ZX-10R_2021.jpg",
+        "Monster":"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Ducati_Monster_937_2021.jpg/640px-Ducati_Monster_937_2021.jpg",
+        "Panigale":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ducati_Panigale_V4_2022.jpg/640px-Ducati_Panigale_V4_2022.jpg",
+        "S1000RR":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/BMW_S1000RR_2020.jpg/640px-BMW_S1000RR_2020.jpg",
+        "Duke":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/KTM_Duke_390_2020.jpg/640px-KTM_Duke_390_2020.jpg",
+        "Hayabusa":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Suzuki_Hayabusa_2021.jpg/640px-Suzuki_Hayabusa_2021.jpg",
+        // لیفان
+        "X50":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Lifan_X50_2015.jpg/640px-Lifan_X50_2015.jpg",
+        "X60":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Lifan_X60_2014.jpg/640px-Lifan_X60_2014.jpg",
+        "X70":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Lifan_X70_2018.jpg/640px-Lifan_X70_2018.jpg",
+        "720":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Lifan_720_2013.jpg/640px-Lifan_720_2013.jpg",
+        "820":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Lifan_820_2015.jpg/640px-Lifan_820_2015.jpg",
+        "T80":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Lifan_T80_2018.jpg/640px-Lifan_T80_2018.jpg",
+        "M7":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Lifan_M7_2017.jpg/640px-Lifan_M7_2017.jpg",
+        "S1":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Lifan_S1_2018.jpg/640px-Lifan_S1_2018.jpg",
+        "X30":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Lifan_X30_2017.jpg/640px-Lifan_X30_2017.jpg",
+        "C30":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Lifan_C30_2016.jpg/640px-Lifan_C30_2016.jpg"
+    };
+    for(let key in images) { if(model.includes(key)) return images[key]; }
+    return `https://placehold.co/600x400/2563eb/white?text=${encodeURIComponent(model)}`;
+}
+
+const vehicleDB = {};
+
+function addVehicle(name, engine, power, torque, trans, options) {
+    vehicleDB[name] = {engine, power, torque, trans, options};
+}
+
+// ==================== خودروها (اصلاح‌شده بر اساس منابع معتبر) ====================
+
+// ایران خودرو
+addVehicle("سمند","1.8 لیتری XU7","100","153","دنده‌ای 5 سرعته","کیسه هوا راننده,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ فولادی 15 اینچی");
+addVehicle("سمند LX","1.8 لیتری XU7","100","153","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سنسور دنده عقب,رینگ فولادی 15 اینچی");
+addVehicle("دنا","1.7 لیتری EF7","113","155","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل (سفارشی),فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی 15 اینچی (سفارشی),ترمز عقب دیسکی (سفارشی)");
+addVehicle("دنا پلاس توربو","1.7 لیتری EF7 توربو","150","215","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,استارت دکمه‌ای,رینگ آلومینیومی");
+addVehicle("تارا V1","1.6 لیتری TU5 پلاس","113","144","دنده‌ای 5 سرعته","2 کیسه هوا,ABS,EBD,ESC,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,نمایشگر لمسی,سنسور پارک عقب,TPMS,کنترل استارت در سربالایی (HAC),رینگ فولادی 15 اینچی");
+addVehicle("تارا V2","1.6 لیتری TU5 پلاس","113","144","اتوماتیک 6 سرعته","4 کیسه هوا,ABS,EBD,ESC,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی تاشو برقی,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,نمایشگر لمسی,TPMS,استارت دکمه‌ای,سنسور نور,سنسور باران,کنترل استارت در سربالایی (HAC),رینگ آلومینیومی 16 اینچی");
+addVehicle("تارا V3","1.6 لیتری TU5 پلاس","113","144","دنده‌ای 6 سرعته","2 کیسه هوا,ABS,EBD,ESC,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,نمایشگر لمسی,سنسور نور,سنسور باران,TPMS,استارت دکمه‌ای,کنترل استارت در سربالایی (HAC),رینگ فولادی 15 اینچی");
+addVehicle("تارا V4","1.6 لیتری TU5 پلاس","113","144","اتوماتیک 6 سرعته","4 کیسه هوا,ABS,EBD,ESC,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی تاشو برقی,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,نمایشگر لمسی,سنسور نور,سنسور باران,TPMS,استارت دکمه‌ای,کنترل استارت در سربالایی (HAC),رینگ آلومینیومی 16 اینچی,چراغ خوش‌آمدگویی,زیرآرنجی جلو و عقب");
+
+// سایپا
+addVehicle("پراید","1.3 لیتری 4 سیلندر","65","95","دنده‌ای 5 سرعته","کیسه هوا راننده,ABS,فرمان هیدرولیک");
+addVehicle("پراید ۱۱۱","1.3 لیتری 4 سیلندر","70","98","دنده‌ای 5 سرعته","کیسه هوا راننده,ABS,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی");
+addVehicle("تیبا","1.5 لیتری 4 سیلندر","85","120","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی");
+addVehicle("ساینا","1.5 لیتری 4 سیلندر","90","125","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,کروز کنترل");
+addVehicle("کوییک","1.5 لیتری 4 سیلندر","90","125","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,کروز کنترل,سنسور دنده عقب");
+addVehicle("شاهین","1.5 لیتری توربو","110","178","دنده‌ای 5 سرعته","2 کیسه هوا,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,سنسور پارک عقب,دوربین عقب,نمایشگر لمسی 7 اینچی,TPMS,ورود بدون کلید (PEPS),استارت دکمه‌ای,کنترل استارت در سربالایی (HAC),تهویه اتوماتیک,رینگ آلومینیومی 15 اینچی");
+
+// بهمن موتور
+addVehicle("ریسپکت","2.0 لیتری 4 سیلندر","150","200","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,رینگ آلومینیومی");
+addVehicle("فیدلیتی","2.0 لیتری 4 سیلندر","150","200","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,صندلی برقی راننده,رینگ آلومینیومی");
+addVehicle("دیگنیتی","2.0 لیتری 4 سیلندر","150","200","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,صندلی برقی راننده,رینگ آلومینیومی");
+addVehicle("بستیون T77","1.5 لیتری توربو","143","205","دنده‌ای 7 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,رینگ آلومینیومی");
+addVehicle("بستیون T99","2.0 لیتری توربو","224","340","دنده‌ای 8 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,صندلی برقی,رینگ آلومینیومی");
+addVehicle("مزدا ۳ (بهمن)","2.0 لیتری 4 سیلندر","155","200","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("مزدا ۲ (بهمن)","1.5 لیتری 4 سیلندر","100","135","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+addVehicle("مزدا ۶ (بهمن)","2.5 لیتری 4 سیلندر","187","252","اتوماتیک 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,صندلی برقی,رینگ آلومینیومی");
+addVehicle("نیسان ماکسیما","3.5 لیتری V6","300","350","اتوماتیک 8 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,صندلی برقی راننده,رینگ آلومینیومی");
+addVehicle("نیسان تیانا","2.5 لیتری V6","185","230","اتوماتیک 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("نیسان جوک","1.6 لیتری توربو","188","240","اتوماتیک 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("نیسان قشقایی","2.0 لیتری 4 سیلندر","141","200","اتوماتیک CVT","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,رینگ آلومینیومی");
+
+// KMC (کرمان موتور)
+addVehicle("KMC T8","2.4 لیتری 4 سیلندر","140","210","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,رینگ آلومینیومی");
+addVehicle("KMC T9","2.4 لیتری 4 سیلندر","145","215","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("KMC J7","1.8 لیتری 4 سیلندر","130","185","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("KMC J4","1.6 لیتری 4 سیلندر","115","155","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+addVehicle("KMC K7","2.0 لیتری 4 سیلندر","135","190","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("KMC K5","1.8 لیتری 4 سیلندر","125","175","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+addVehicle("KMC K8","2.4 لیتری 4 سیلندر","145","215","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,رینگ آلومینیومی");
+addVehicle("KMC X5","1.5 لیتری توربو TGDI","172","280","اتوماتیک 6 سرعته دوکلاچه DCT","4 کیسه هوا,ABS,EBD,ESC,TCS,HAC,TPMS,ترمز پارک برقی (EPB),اتوهلد (Auto Hold),دوربین 360 درجه,سنسور پارک عقب,سانروف پانورامیک,نمایشگر 12.8 اینچی,کلاستر دیجیتال 7 اینچی,صندلی راننده برقی با گرمکن و حافظه,سیستم صوتی با 10 بلندگو و ساب‌ووفر,تهویه مطبوع الکترونیکی لمسی,کروز کنترل,فرمان برقی,سردکن کنسول میانی (کول‌باکس),خروجی برق ردیف عقب,رینگ آلومینیومی 18 اینچی");
+
+// مدیران خودرو
+addVehicle("ام‌وی‌ام X22","1.5 لیتری 4 سیلندر","95","135","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+addVehicle("ام‌وی‌ام X33","1.6 لیتری 4 سیلندر","105","145","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,کروز کنترل,رینگ آلومینیومی");
+addVehicle("ام‌وی‌ام X55","1.8 لیتری 4 سیلندر","130","185","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("اس‌وی‌ام X5","1.6 لیتری 4 سیلندر","115","160","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("اس‌وی‌ام X7","1.8 لیتری 4 سیلندر","135","190","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,رینگ آلومینیومی");
+addVehicle("اس‌وی‌ام X9","2.0 لیتری توربو","177","300","دنده‌ای 8 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,رینگ آلومینیومی");
+
+// جک (کرمان موتور)
+addVehicle("جک J4","1.6 لیتری 4 سیلندر","115","155","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+addVehicle("جک J5","1.8 لیتری 4 سیلندر","130","185","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("جک S3","1.5 لیتری 4 سیلندر","105","145","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+addVehicle("جک S5","1.8 لیتری 4 سیلندر","135","190","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,رینگ آلومینیومی");
+addVehicle("جک S7","2.0 لیتری توربو","190","300","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("جک T8","2.0 لیتری 4 سیلندر","150","200","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,رینگ آلومینیومی");
+addVehicle("جک T9","2.0 لیتری توربو","190","320","دنده‌ای 8 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,ترمز پارک برقی,رینگ آلومینیومی");
+
+// ==================== لیفان (اصلاح‌شده بر اساس منابع معتبر) ====================
+// منبع: خودروبانک، باما، همراه مکانیک [citation:1][citation:2][citation:3]
+
+// لیفان X50 - هاچبک کراس [citation:1][citation:5]
+addVehicle("X50","1.5 لیتری 4 سیلندر 16 سوپاپ","102","133","CVT یا 5 سرعته دستی","2 کیسه هوا,ABS,EBD,ترمز کمکی (BAS),فرمان برقی,شیشه برقی,آینه برقی تاشو,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,چراغ روز (DRL),تنظیم برقی ارتفاع چراغ,رینگ آلومینیومی 15 اینچی,روکش چرمی صندلی,سیستم صوتی با 4 بلندگو");
+
+// لیفان X60 - کراساوور [citation:2]
+addVehicle("X60","1.8 لیتری 4 سیلندر","126","168","CVT دوحالته (اسپرت-برفی)","2 کیسه هوا,ABS,EBD,ترمز کمکی (BA),فرمان هیدرولیک,شیشه برقی,آینه برقی تاشو,قفل مرکزی,دوربین عقب,سنسور پارک عقب,چراغ روز (DRL),رینگ آلومینیومی 16 اینچی,سیستم صوتی با 6 بلندگو و DVD,نمایشگر 6 اینچی,کروز کنترل,کنترل ایستایی در سربالایی (HSA),سیستم تهویه دستی,روکش چرمی صندلی,سنسور فشار باد تایر (TPMS)");
+
+// لیفان X70 - کراساوور [citation:3][citation:6]
+addVehicle("X70","2.0 لیتری 4 سیلندر 16 سوپاپ","140","178","CVT با حالت اسپرت و زمستانی","2 کیسه هوا,ABS,EBD,ترمز کمکی (BAS),کنترل پایداری (ESP),فرمان هیدرولیک,شیشه برقی,آینه برقی تاشو,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,چراغ روز (DRL),رینگ آلومینیومی 18 اینچی,سیستم صوتی با 6 بلندگو,نمایشگر 9 اینچی لمسی,کروز کنترل,سیستم تهویه اتوماتیک,صندلی راننده برقی 6 حالته,گرمکن صندلی‌های جلو,روکش چرمی صندلی,سنسور فشار باد تایر (TPMS),ورود و استارت دکمه‌ای,حالت رانندگی ECO,چراغ خوش‌آمدگویی");
+
+// لیفان 720 - سدان [citation:7]
+addVehicle("720","1.8 لیتری 4 سیلندر","126.5","159","دنده‌ای 5 سرعته","4 کیسه هوا (راننده، سرنشین جلو و پرده‌ای),ABS,EBD,ترمز دیسکی جلو و عقب (چرخ‌های جلو خنک‌شونده),دوربین دید عقب,سنسور دنده عقب,سیستم ضد سرقت,رینگ آلومینیومی");
+
+// لیفان 820 - سدان سایز متوسط [citation:4][citation:8]
+addVehicle("820","2.4 لیتری 4 سیلندر (LF489Q)","158","221","اتوماتیک 6 سرعته","6 کیسه هوا (راننده، سرنشین جلو، جانبی جلو، پرده‌ای),ABS,EBD,ترمز کمکی (BAS),کنترل کشش (TCS),کنترل پایداری (ESP),کنترل ایستایی در سربالایی (HAC),دوربین عقب,سنسور پارک جلو و عقب,کروز کنترل,ورود و استارت دکمه‌ای,سیستم تهویه اتوماتیک,صندلی راننده برقی 6 حالته با تنظیم گودی کمر,گرمکن صندلی‌های جلو,سانروف,سیستم صوتی با 6 بلندگو,نمایشگر 8 اینچی لمسی,پشتیبانی از Bluetooth,USB,MP5,AUX,آینه جانبی تاشو برقی با گرمکن,چراغ روز (DRL),اتولایت,چراغ بدرقه,ترمز پارک پدالی");
+
+// لیفان T80 - کراساوور (اطلاعات محدود، بر اساس منابع عمومی)
+addVehicle("T80","1.8 لیتری توربو","150","215","دنده‌ای 6 سرعته","2 کیسه هوا,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,نمایشگر لمسی,رینگ آلومینیومی");
+
+// لیفان M7 - ون (اطلاعات محدود، بر اساس منابع عمومی)
+addVehicle("M7","2.0 لیتری 4 سیلندر","140","178","دنده‌ای 5 سرعته","2 کیسه هوا,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,دوربین عقب,سنسور پارک عقب,رینگ آلومینیومی");
+
+// لیفان S1 - کراساوور کوچک (اطلاعات محدود، بر اساس منابع عمومی)
+addVehicle("S1","1.5 لیتری 4 سیلندر","102","133","دنده‌ای 5 سرعته","2 کیسه هوا,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,سنسور پارک عقب,رینگ آلومینیومی");
+
+// لیفان X30 - ون (اطلاعات محدود، بر اساس منابع عمومی)
+addVehicle("X30","1.5 لیتری 4 سیلندر","100","130","دنده‌ای 5 سرعته","2 کیسه هوا,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,دوربین عقب,سنسور پارک عقب,رینگ فولادی");
+
+// لیفان C30 - سدان (اطلاعات محدود، بر اساس منابع عمومی)
+addVehicle("C30","1.5 لیتری 4 سیلندر","102","133","دنده‌ای 5 سرعته","2 کیسه هوا,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,رینگ آلومینیومی");
+
+// ==================== برندهای خارجی ====================
+// BMW
+addVehicle("X5","3.0 لیتری 6 سیلندر توربو","335","450","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک XDrive,فرمان برقی,شیشه برقی,آینه برقی گرم‌کن,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی ماساژور,سیستم صوتی Harman Kardon");
+addVehicle("X3","2.0 لیتری 4 سیلندر توربو","248","350","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک XDrive,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین عقب,نمایشگر لمسی,صندلی برقی");
+addVehicle("X7","3.0 لیتری 6 سیلندر توربو","335","450","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک XDrive,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی,صندلی ماساژور,سیستم صوتی Harman Kardon");
+addVehicle("M3","3.0 لیتری 6 سیلندر توربو","480","550","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق M");
+addVehicle("M4","3.0 لیتری 6 سیلندر توربو","480","550","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق M");
+addVehicle("M5","4.4 لیتری V8 توربو","600","750","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی اسپرت");
+addVehicle("M8","4.4 لیتری V8 توربو","600","750","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی اسپرت");
+addVehicle("i4","برقی 83.9 کیلووات‌ساعت","340","430","اتوماتیک تک سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,نمایشگر لمسی 14.9 اینچی,شارژ سریع");
+
+// مرسدس بنز
+addVehicle("C200","1.8 لیتری 4 سیلندر توربو","184","250","اتوماتیک 7 سرعته 7G-Tronic","6 کیسه هوا,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر,سیستم صوتی,صندلی چرمی,تهویه اتوماتیک");
+addVehicle("S500","3.0 لیتری V6 توربو","435","520","اتوماتیک 9 سرعته 9G-Tronic","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.8 اینچی,صندلی ماساژور,سیستم صوتی Burmester 4D");
+addVehicle("GLC","2.0 لیتری 4 سیلندر توربو","255","400","اتوماتیک 9 سرعته 9G-Tronic","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک 4MATIC,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین عقب,نمایشگر لمسی");
+addVehicle("G-Wagon","4.0 لیتری V8 توربو","416","610","اتوماتیک 9 سرعته 9G-Tronic","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی,قفل دیفرانسیل");
+addVehicle("E200","2.0 لیتری 4 سیلندر توربو","197","320","اتوماتیک 9 سرعته 9G-Tronic","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 12.3 اینچی,صندلی برقی");
+addVehicle("E63","4.0 لیتری V8 توربو","603","850","اتوماتیک 9 سرعته 9G-Tronic","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی اسپرت");
+addVehicle("CLA","2.0 لیتری 4 سیلندر توربو","221","350","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 10.25 اینچی");
+addVehicle("CLS","3.0 لیتری 6 سیلندر توربو","367","500","اتوماتیک 9 سرعته 9G-Tronic","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی");
+
+// آئودی
+addVehicle("A3","1.4 لیتری 4 سیلندر توربو","147","250","اتوماتیک 7 سرعته DCT","6 کیسه هوا,ABS,EBD,ESP,کروز کنترل تطبیقی (ACC),فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 10 اینچی,کلاستر دیجیتال,تهویه اتوماتیک,ورود و استارت بدون کلید,سنسور پارک جلو و عقب,دوربین عقب,صندلی برقی راننده,سانروف,رادار هشدار خروج از خط (LDW),ترمز اضطراری هوشمند (AEB),رادار جلوگیری از برخورد از جلو (FCW)");
+addVehicle("A4","2.0 لیتری 4 سیلندر توربو","201","320","اتوماتیک 7 سرعته S tronic","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 10.1 اینچی");
+addVehicle("Q5","2.0 لیتری 4 سیلندر توربو","201","320","اتوماتیک 7 سرعته S tronic","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک quattro,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی");
+addVehicle("R8","5.2 لیتری V10","570","560","اتوماتیک 7 سرعته S tronic","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک quattro,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق اسپرت");
+addVehicle("A5","2.0 لیتری 4 سیلندر توربو","201","320","اتوماتیک 7 سرعته S tronic","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک quattro,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 10.1 اینچی");
+addVehicle("A6","3.0 لیتری V6 توربو","335","500","اتوماتیک 7 سرعته S tronic","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک quattro,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی");
+addVehicle("A7","3.0 لیتری V6 توربو","335","500","اتوماتیک 7 سرعته S tronic","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک quattro,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی");
+addVehicle("Q7","3.0 لیتری V6 توربو","335","500","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل هوشمند,چهارچرخ محرک quattro,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی");
+
+// تویوتا
+addVehicle("کمری","2.5 لیتری 4 سیلندر","203","250","اتوماتیک 8 سرعته Direct Shift","کیسه هوا 10 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 9 اینچی,صندلی برقی,سیستم صوتی JBL");
+addVehicle("کرولا","1.8 لیتری 4 سیلندر","140","180","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی");
+addVehicle("لندکروزر","4.6 لیتری V8","308","439","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی,صندلی برقی,سیستم تعلیق KDSS");
+addVehicle("سوپرا","3.0 لیتری 6 سیلندر","340","500","اتوماتیک 8 سرعته ZF","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 8.8 اینچی,سیستم تعلیق تطبیقی");
+addVehicle("پریوس","1.8 لیتری هیبرید","121","142","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 7 اینچی,سیستم صوتی JBL");
+addVehicle("هایلوکس","2.8 لیتری توربو","201","500","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی");
+addVehicle("فورچونر","2.8 لیتری توربو","201","500","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی");
+addVehicle("هایس","2.8 لیتری توربو","136","400","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,دوربین عقب,صندلی برقی");
+
+// نیسان
+addVehicle("آلتیما","2.5 لیتری 4 سیلندر","188","244","اتوماتیک CVT","کیسه هوا 10 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی,سیستم صوتی Bose");
+addVehicle("جوک","1.6 لیتری توربو","188","240","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("پاترول","4.0 لیتری V6","275","394","اتوماتیک 7 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی,صندلی برقی,سیستم تعلیق هیدرولیک");
+addVehicle("GT-R","3.8 لیتری V6 توربو","565","637","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("سنترا","2.0 لیتری 4 سیلندر","149","200","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی,صندلی برقی");
+addVehicle("مورانو","3.5 لیتری V6","260","325","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("ایکس‌تریل","2.5 لیتری 4 سیلندر","181","245","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 7 اینچی,صندلی برقی");
+addVehicle("آرمادا","5.6 لیتری V8","400","560","اتوماتیک 7 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن");
+
+// مزدا
+addVehicle("مزدا ۳","2.0 لیتری 4 سیلندر","155","200","دنده‌ای 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("مزدا ۶","2.5 لیتری 4 سیلندر","187","252","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی,سیستم صوتی Bose");
+addVehicle("CX-5","2.5 لیتری 4 سیلندر","187","252","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین عقب,نمایشگر لمسی 10.25 اینچی,صندلی برقی,سیستم صوتی Bose");
+addVehicle("مزدا ۲","1.5 لیتری 4 سیلندر","110","150","دنده‌ای 5 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 7 اینچی");
+addVehicle("CX-3","2.0 لیتری 4 سیلندر","148","192","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی");
+addVehicle("CX-9","2.5 لیتری توربو","227","420","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 9 اینچی,صندلی برقی گرم‌کن");
+addVehicle("MX-5","2.0 لیتری 4 سیلندر","181","205","دنده‌ای 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 7 اینچی,سیستم تعلیق تطبیقی");
+addVehicle("CX-30","2.5 لیتری 4 سیلندر","186","252","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.8 اینچی,صندلی برقی گرم‌کن");
+
+// هیوندای
+addVehicle("سانتافه","2.5 لیتری 4 سیلندر","191","245","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Bose");
+addVehicle("النترا","2.0 لیتری 4 سیلندر","147","179","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("سوناتا","2.5 لیتری 4 سیلندر","191","245","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10.25 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("توسان","2.5 لیتری 4 سیلندر","187","241","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی گرم‌کن");
+addVehicle("i10","1.2 لیتری 4 سیلندر","83","120","دنده‌ای 5 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 8 اینچی");
+addVehicle("i20","1.4 لیتری 4 سیلندر","100","130","دنده‌ای 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی");
+addVehicle("i30","1.6 لیتری توربو","200","265","دنده‌ای 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی,صندلی اسپرت");
+addVehicle("پالیسید","3.8 لیتری V6","291","355","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Harman Kardon");
+
+// کیا
+addVehicle("اسپورتیج","2.5 لیتری 4 سیلندر","187","241","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("سراتو","2.0 لیتری 4 سیلندر","155","200","اتوماتیک 6 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,ESP,کروز کنترل,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("اپتیما","2.4 لیتری 4 سیلندر","185","241","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10.25 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("سورنتو","2.5 لیتری توربو","277","421","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Bose");
+addVehicle("پیکانتو","1.2 لیتری 4 سیلندر","84","122","دنده‌ای 5 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 7 اینچی");
+addVehicle("ریو","1.6 لیتری 4 سیلندر","120","150","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی");
+addVehicle("استینگر","3.3 لیتری V6 توربو","365","510","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 10.25 اینچی,صندلی اسپرت,سیستم صوتی Harman Kardon");
+addVehicle("تلوراید","3.8 لیتری V6","291","355","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Harman Kardon");
+
+// جنسیس
+addVehicle("G70","2.0 لیتری توربو","252","353","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Lexicon");
+addVehicle("G80","3.5 لیتری V6 توربو","375","530","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 14.5 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Lexicon");
+addVehicle("GV80","3.5 لیتری V6 توربو","375","530","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 14.5 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Lexicon,سیستم تعلیق هوایی");
+addVehicle("G90","5.0 لیتری V8","420","520","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Lexicon");
+addVehicle("GV70","2.5 لیتری توربو","304","422","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 14.5 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Lexicon");
+addVehicle("G80 اسپورت","3.5 لیتری V6 توربو","375","530","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 14.5 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("GV60","برقی 77.4 کیلووات‌ساعت","429","605","اتوماتیک تک سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 12.3 اینچی,شارژ سریع,سیستم صوتی Bang & Olufsen");
+addVehicle("الکتریفاید G80","برقی 87.2 کیلووات‌ساعت","365","700","اتوماتیک تک سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 14.5 اینچی,صندلی برقی گرم‌کن و سردکن,شارژ سریع");
+
+// هوندا
+addVehicle("سیویک","2.0 لیتری 4 سیلندر","158","138","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی,صندلی برقی گرم‌کن");
+addVehicle("سیویک تایپ R","2.0 لیتری توربو","306","400","دنده‌ای 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 9 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("آکورد","2.0 لیتری توربو","252","370","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("CR-V","1.5 لیتری توربو","190","243","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی,صندلی برقی گرم‌کن");
+addVehicle("HR-V","1.8 لیتری 4 سیلندر","141","174","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی");
+addVehicle("پایلوت","3.5 لیتری V6","280","355","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("پاسپورت","3.5 لیتری V6","280","355","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("ریج‌لاین","3.5 لیتری V6","280","355","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+
+// میتسوبیشی
+addVehicle("لنسر","1.8 لیتری 4 سیلندر","110","160","دنده‌ای 5 سرعته","کیسه هوا راننده و سرنشین,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی");
+addVehicle("آوتلندر","2.4 لیتری 4 سیلندر","168","222","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("پاجرو","3.2 لیتری توربو","161","280","اتوماتیک 5 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان هیدرولیک,شیشه برقی,آینه برقی,سانروف,دوربین عقب,صندلی برقی گرم‌کن,سیستم تعلیق");
+addVehicle("اکلیپس کراس","1.5 لیتری توربو","152","250","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("اسپورت","2.0 لیتری 4 سیلندر","150","200","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی");
+addVehicle("ASX","2.0 لیتری 4 سیلندر","150","197","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی");
+addVehicle("لنسر اسپورتبک","2.4 لیتری 4 سیلندر","168","230","اتوماتیک CVT","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی,صندلی برقی گرم‌کن");
+addVehicle("میراژ","1.2 لیتری 3 سیلندر","78","100","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 7 اینچی");
+
+// مازراتی
+addVehicle("گیبلی","3.0 لیتری V6 توربو","345","500","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Harman Kardon");
+addVehicle("لوانته","3.0 لیتری V6 توربو","345","500","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Harman Kardon");
+addVehicle("مک۲۰","3.0 لیتری V6 توربو","630","730","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("کواتروپورته","3.8 لیتری V8 توربو","580","730","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bowers & Wilkins");
+addVehicle("گرنتوریسمو","4.7 لیتری V8","460","520","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("گرن‌کابریو","4.7 لیتری V8","460","520","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سقف کانورتیبل,نمایشگر لمسی,صندلی اسپرت");
+addVehicle("MC12","6.0 لیتری V12","630","652","اتوماتیک 6 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,فرمان برقی,شیشه برقی,آینه برقی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("MC20","3.0 لیتری V6 توربو","630","730","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+
+// آلفارومئو
+addVehicle("جولیا","2.0 لیتری توربو","280","400","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Harman Kardon");
+addVehicle("جولیا کوادروفولیو","2.9 لیتری V6 توربو","510","600","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("استلویو","2.0 لیتری توربو","280","400","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8.8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Harman Kardon");
+addVehicle("تونیاله","1.3 لیتری هیبرید","160","240","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10.25 اینچی,صندلی برقی گرم‌کن");
+addVehicle("۴سی","1.75 لیتری توربو","240","350","دنده‌ای 6 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی");
+addVehicle("می‌تو","1.8 لیتری توربو","240","350","دنده‌ای 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی اسپرت");
+addVehicle("۸سی","4.7 لیتری V8","450","470","اتوماتیک 6 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,فرمان برقی,شیشه برقی,آینه برقی,سیستم تعلیق تطبیقی");
+addVehicle("جولیا TZ2","3.0 لیتری V6 توربو","510","600","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,صندلی اسپرت,سیستم تعلیق تطبیقی");
+
+// پژو
+addVehicle("۲۰۸","1.2 لیتری توربو","110","205","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 7 اینچی");
+addVehicle("۳۰۸","1.6 لیتری توربو","180","250","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن");
+addVehicle("۵۰۸","1.6 لیتری توربو","180","250","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Focal");
+addVehicle("۲۰۰۸","1.2 لیتری توربو","130","230","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10 اینچی");
+addVehicle("۳۰۰۸","1.6 لیتری توربو","180","250","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Focal");
+addVehicle("۴۰۸","1.6 لیتری توربو","180","250","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن");
+addVehicle("۵۰۰۸","1.6 لیتری توربو","180","250","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Focal");
+addVehicle("۱۰۰۷","1.4 لیتری 4 سیلندر","75","120","دنده‌ای 5 سرعته","کیسه هوا 4 عددی,ABS,EBD,فرمان هیدرولیک,شیشه برقی,آینه برقی,قفل مرکزی");
+
+// فورد
+addVehicle("فوکوس","1.5 لیتری توربو","150","240","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("موستانگ","5.0 لیتری V8","450","530","دنده‌ای 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("اکسپلورر","2.3 لیتری توربو","300","420","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("اف-۱۵۰","3.5 لیتری V6 توربو","400","680","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 12 اینچی,صندلی برقی گرم‌کن,سیستم تعلیق");
+addVehicle("فیستا","1.0 لیتری توربو","125","170","دنده‌ای 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی");
+addVehicle("موندئو","2.0 لیتری توربو","203","320","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("برونکو","2.3 لیتری توربو","300","440","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 12 اینچی,صندلی برقی گرم‌کن");
+addVehicle("مستنگ GT","5.0 لیتری V8","450","530","دنده‌ای 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی,ترمز برمبو");
+
+// شورولت
+addVehicle("کامارو","6.2 لیتری V8","455","620","دنده‌ای 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("کروت","6.2 لیتری V8","495","637","دنده‌ای 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("اکویناکس","1.5 لیتری توربو","170","275","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 7 اینچی,صندلی برقی گرم‌کن");
+addVehicle("سابربن","6.2 لیتری V8","420","624","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.2 اینچی,صندلی برقی گرم‌کن,سیستم تعلیق هوایی");
+addVehicle("تاهو","5.3 لیتری V8","355","520","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.2 اینچی,صندلی برقی گرم‌کن");
+addVehicle("مالیبو","1.5 لیتری توربو","160","250","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("اسپارک","1.4 لیتری 4 سیلندر","98","127","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 7 اینچی");
+addVehicle("تراورس","3.6 لیتری V6","310","360","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+
+// جیپ
+addVehicle("رنگلر","2.0 لیتری توربو","270","400","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.4 اینچی,صندلی گرم‌کن,سیستم تعلیق");
+addVehicle("گرند چروکی","3.6 لیتری V6","290","350","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8.4 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Harman Kardon");
+addVehicle("کامپس","2.4 لیتری 4 سیلندر","180","230","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.4 اینچی");
+addVehicle("چروکی","2.0 لیتری توربو","270","400","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.4 اینچی,صندلی برقی گرم‌کن");
+addVehicle("رنگلر آنلیمیتد","2.0 لیتری توربو","270","400","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.4 اینچی,صندلی گرم‌کن,سیستم تعلیق");
+addVehicle("گلادیاتور","3.0 لیتری V6 توربو","260","600","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.4 اینچی,صندلی گرم‌کن");
+addVehicle("ریس","2.4 لیتری 4 سیلندر","180","230","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.4 اینچی");
+addVehicle("کمانچی","2.0 لیتری توربو","270","400","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.4 اینچی,صندلی گرم‌کن");
+
+// کادیلاک
+addVehicle("CT5","3.0 لیتری V6 توربو","360","550","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("اسکالید","6.2 لیتری V8","420","624","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 16.9 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی AKG,سیستم تعلیق هوایی");
+addVehicle("CT4","2.0 لیتری توربو","237","350","اتوماتیک 10 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("XT5","3.6 لیتری V6","310","365","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("XT6","3.6 لیتری V6","310","365","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bose");
+addVehicle("CT6","4.2 لیتری V8 توربو","550","850","اتوماتیک 10 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.2 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bose");
+addVehicle("XT4","2.0 لیتری توربو","235","350","اتوماتیک 9 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن");
+addVehicle("ELR","برقی و بنزینی","233","400","اتوماتیک CVT","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8 اینچی,شارژ سریع");
+
+// جگوار
+addVehicle("F-Pace","2.0 لیتری توربو","250","365","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 11.4 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Meridian");
+addVehicle("I-Pace","برقی 90 کیلووات‌ساعت","394","696","اتوماتیک تک سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن,شارژ سریع,سیستم صوتی Meridian");
+addVehicle("F-Type","5.0 لیتری V8 سوپرشارژ","575","700","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("XE","2.0 لیتری توربو","250","365","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Meridian");
+addVehicle("XF","3.0 لیتری V6 سوپرشارژ","380","450","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 11.4 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Meridian");
+addVehicle("E-Pace","2.0 لیتری توربو","246","365","اتوماتیک 9 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن");
+addVehicle("XJ","5.0 لیتری V8 سوپرشارژ","470","575","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Meridian");
+addVehicle("C-X75","هایبرید","509","700","اتوماتیک 6 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی");
+
+// لندروور
+addVehicle("ایواک","2.0 لیتری توربو","246","365","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Meridian");
+addVehicle("اسپورت","3.0 لیتری V6 سوپرشارژ","340","450","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Meridian,سیستم تعلیق هوایی");
+addVehicle("رنج روور","5.0 لیتری V8 سوپرشارژ","518","625","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Meridian,سیستم تعلیق هوایی");
+addVehicle("دیفندر","3.0 لیتری V6 سوپرشارژ","340","450","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 11.4 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Meridian,سیستم تعلیق هوایی");
+addVehicle("ولار","2.0 لیتری توربو","246","365","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Meridian");
+addVehicle("دیسکاوری","3.0 لیتری V6 سوپرشارژ","340","450","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 11.4 اینچی,صندلی برقی گرم‌کن و سردکن,سیستم صوتی Meridian,سیستم تعلیق هوایی");
+addVehicle("ایس","2.0 لیتری توربو","246","365","اتوماتیک 9 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10 اینچی,صندلی برقی گرم‌کن");
+addVehicle("فریلندر","2.2 لیتری توربو","150","420","دنده‌ای 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان هیدرولیک,شیشه برقی,آینه برقی,سانروف,صندلی گرم‌کن");
+
+// رولزرویس
+addVehicle("فانتوم","6.7 لیتری V12 توربو","563","900","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bespoke,سیستم تعلیق هوایی");
+addVehicle("کالینان","6.7 لیتری V12 توربو","563","900","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bespoke,سیستم تعلیق هوایی");
+addVehicle("گوست","6.6 لیتری V12 توربو","563","820","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bespoke,سیستم تعلیق هوایی");
+addVehicle("راید","6.6 لیتری V12 توربو","563","820","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bespoke,سیستم تعلیق هوایی");
+addVehicle("دوون","6.7 لیتری V12","580","900","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم تعلیق هوایی");
+addVehicle("اسپکتر","برقی 120 کیلووات‌ساعت","584","900","اتوماتیک تک سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,شارژ سریع,سیستم تعلیق هوایی");
+addVehicle("سویپت","6.6 لیتری V12","563","820","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 10.25 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم تعلیق هوایی");
+addVehicle("افانتوم کروم","6.7 لیتری V12 توربو","563","900","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی ماساژور گرم‌کن و سردکن,سیستم صوتی Bespoke,سیستم تعلیق هوایی");
+
+// داج
+addVehicle("چلنجر","6.2 لیتری V8 سوپرشارژ","717","950","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.4 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("چلنجر هلکیت","6.2 لیتری V8 سوپرشارژ","807","980","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی 8.4 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی,ترمز برمبو");
+addVehicle("چارجر","6.2 لیتری V8 سوپرشارژ","717","950","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.4 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("دورانگو","6.2 لیتری V8 سوپرشارژ","717","950","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 10.1 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Harman Kardon");
+addVehicle("چارجر هلکیت","6.2 لیتری V8 سوپرشارژ","807","980","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی 8.4 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی,ترمز برمبو");
+addVehicle("مگنوم","6.1 لیتری V8","425","570","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی برقی گرم‌کن");
+addVehicle("نیترو","4.0 لیتری V6","210","319","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,صندلی برقی گرم‌کن");
+addVehicle("ویپر","8.4 لیتری V10","640","814","دنده‌ای 6 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,فرمان برقی,شیشه برقی,آینه برقی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+
+// استون مارتین
+addVehicle("DB11","5.2 لیتری V12 توربو","630","700","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bang & Olufsen");
+addVehicle("DBS","5.2 لیتری V12 توربو","725","900","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("ونتیج","4.0 لیتری V8 توربو","510","685","اتوماتیک 8 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی 8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی");
+addVehicle("رپید","6.0 لیتری V12","550","630","اتوماتیک 6 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی برقی گرم‌کن,سیستم صوتی Bang & Olufsen");
+addVehicle("والکیری","6.5 لیتری V12","1000","740","اتوماتیک 7 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("ونکویش","6.0 لیتری V12","600","630","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,صندلی اسپرت");
+addVehicle("سیگنت","1.8 لیتری 4 سیلندر","100","170","دنده‌ای 6 سرعته","کیسه هوا 4 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی");
+addVehicle("DBS V12","5.2 لیتری V12 توربو","725","900","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,ترمز خودکار,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین 360 درجه,نمایشگر لمسی 8 اینچی,صندلی اسپرت,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+
+// مکلارن
+addVehicle("۷۲۰S","4.0 لیتری V8 توربو","720","770","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک,سیستم صوتی Bowers & Wilkins");
+addVehicle("سنا","4.0 لیتری V8 توربو","800","800","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک,آیرودینامیک فعال");
+addVehicle("آرتورا","3.0 لیتری V6 توربو","680","720","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("۶۰۰LT","3.8 لیتری V8 توربو","600","620","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("۵۷۰S","3.8 لیتری V8 توربو","570","600","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("۶۵۰S","4.0 لیتری V8 توربو","650","680","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("GT","4.0 لیتری V8 توربو","620","630","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+addVehicle("SPEEDTAIL","4.0 لیتری V8 توربو","1050","1150","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,نمایشگر لمسی,سیستم تعلیق تطبیقی,ترمز کربن سرامیک");
+
+// ==================== سانگ یانگ (SsangYong) ====================
+addVehicle("تایوان","2.0 لیتری توربو","175","350","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("رکستون","2.0 لیتری توربو","225","420","اتوماتیک 8 سرعته","کیسه هوا 8 عددی,ABS,EBD,ESP,کروز کنترل تطبیقی,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف پانوراما,دوربین 360 درجه,نمایشگر لمسی 12.3 اینچی,صندلی برقی گرم‌کن,سیستم صوتی");
+addVehicle("کوراندو","1.6 لیتری توربو","163","280","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("تیوولی","1.6 لیتری 4 سیلندر","128","160","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("موسو","2.2 لیتری توربو","181","420","اتوماتیک 7 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("اکتیون","2.0 لیتری توربو","155","360","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+addVehicle("کایران","2.7 لیتری 5 سیلندر","165","340","اتوماتیک 5 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,چهارچرخ محرک,فرمان هیدرولیک,شیشه برقی,آینه برقی,سانروف,رینگ آلومینیومی");
+addVehicle("رودینوس","2.0 لیتری توربو","175","350","اتوماتیک 6 سرعته","کیسه هوا 6 عددی,ABS,EBD,ESP,کروز کنترل,فرمان برقی,شیشه برقی,آینه برقی,سانروف,دوربین عقب,نمایشگر لمسی,رینگ آلومینیومی");
+
+// ==================== موتورسیکلت‌های هوندا ====================
+addVehicle("CBR500R","500 سی‌سی 2 سیلندر","47","43","دنده‌ای 6 سرعته","ABS,چراغ LED,کلاچ لغزشی,ترمز دیسکی توکار,نمایشگر دیجیتال");
+addVehicle("CBR650R","650 سی‌سی 4 سیلندر","94","64","دنده‌ای 6 سرعته","ABS,چراغ LED,کلاچ لغزشی,ترمز دیسکی توکار,نمایشگر دیجیتال,سیستم کنترل کشش HSTC");
+addVehicle("CBR1000RR","999 سی‌سی 4 سیلندر","190","115","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر,کلاچ لغزشی");
+addVehicle("CB500X","471 سی‌سی 2 سیلندر","47","43","دنده‌ای 6 سرعته","ABS,چراغ LED,کلاچ لغزشی,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("CB650R","649 سی‌سی 4 سیلندر","94","64","دنده‌ای 6 سرعته","ABS,چراغ LED,کلاچ لغزشی,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Africa Twin","1084 سی‌سی 2 سیلندر","102","105","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Gold Wing","1833 سی‌سی 6 سیلندر","126","170","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل,سیستم صوتی,کیسه هوا");
+addVehicle("Rebel 500","471 سی‌سی 2 سیلندر","47","43","دنده‌ای 6 سرعته","ABS,چراغ LED,کلاچ لغزشی,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("CRF450R","449 سی‌سی تک سیلندر","60","50","دنده‌ای 5 سرعته","ترمز دیسکی,چراغ LED,سیستم تعلیق");
+addVehicle("NC750X","745 سی‌سی 2 سیلندر","54","68","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("X-ADV","745 سی‌سی 2 سیلندر","54","68","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Monkey","125 سی‌سی تک سیلندر","9.4","11","دنده‌ای 4 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("Grom","125 سی‌سی تک سیلندر","9.7","11","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("Super Cub","125 سی‌سی تک سیلندر","9.7","10","دنده‌ای 4 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("CB125R","125 سی‌سی تک سیلندر","15","11","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("CBR250RR","249 سی‌سی 2 سیلندر","41","25","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,کوییک شیفتر");
+addVehicle("CRF300L","286 سی‌سی تک سیلندر","27","26","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,سیستم تعلیق");
+addVehicle("Forza 750","745 سی‌سی 2 سیلندر","54","68","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("CG125","125 سی‌سی تک سیلندر","10","9","دنده‌ای 4 سرعته","ترمز کاسه‌ای,چراغ معمولی,سیستم برقی 12 ولت");
+addVehicle("CB125","125 سی‌سی تک سیلندر","11","10","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("CB250","249 سی‌سی 2 سیلندر","25","22","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("CB1300","1284 سی‌سی 4 سیلندر","110","117","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش");
+
+// ==================== سایر برندهای موتورسیکلت ====================
+addVehicle("MT-07","689 سی‌سی 2 سیلندر","74","68","دنده‌ای 6 سرعته","ABS,نمایشگر LCD,کلاچ لغزشی,ترمز دیسکی,چراغ LED");
+addVehicle("MT-09","889 سی‌سی 3 سیلندر","119","93","دنده‌ای 6 سرعته","ABS,نمایشگر LCD,کلاچ لغزشی,ترمز دیسکی,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("YZF-R1","998 سی‌سی 4 سیلندر","200","112","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر,کلاچ لغزشی");
+addVehicle("YZF-R6","599 سی‌سی 4 سیلندر","118","61","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Tenere 700","689 سی‌سی 2 سیلندر","74","68","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم تعلیق");
+addVehicle("XSR700","689 سی‌سی 2 سیلندر","74","68","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,کلاچ لغزشی");
+addVehicle("XT250","249 سی‌سی تک سیلندر","16","20","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("VMAX","1679 سی‌سی V4","197","167","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Bolt","941 سی‌سی 2 سیلندر","65","80","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("Tracer 9","889 سی‌سی 3 سیلندر","119","93","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Niken","889 سی‌سی 3 سیلندر","119","93","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,سیستم تعلیق جلو دو چرخ");
+addVehicle("GSX-R1000","999 سی‌سی 4 سیلندر","202","118","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("GSX-R600","599 سی‌سی 4 سیلندر","125","68","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("SV650","645 سی‌سی 2 سیلندر","75","64","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("V-Strom 650","645 سی‌سی 2 سیلندر","71","62","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Boulevard M109R","1783 سی‌سی V2","125","160","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("DR-Z400","398 سی‌سی تک سیلندر","40","39","دنده‌ای 5 سرعته","ترمز دیسکی,چراغ LED");
+addVehicle("GSX-S750","749 سی‌سی 4 سیلندر","114","80","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Hayabusa","1340 سی‌سی 4 سیلندر","190","150","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل,کوییک شیفتر");
+addVehicle("Katana","999 سی‌سی 4 سیلندر","150","108","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Bandit","1250 سی‌سی 4 سیلندر","98","108","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Ninja 400","399 سی‌سی 2 سیلندر","45","38","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Ninja ZX-6R","636 سی‌سی 4 سیلندر","130","70","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("ZX-10R","998 سی‌سی 4 سیلندر","203","115","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر,کلاچ لغزشی");
+addVehicle("Ninja 650","649 سی‌سی 2 سیلندر","68","64","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,کلاچ لغزشی");
+addVehicle("Z900","948 سی‌سی 4 سیلندر","125","98","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("Vulcan S","649 سی‌سی 2 سیلندر","61","62","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Versys 650","649 سی‌سی 2 سیلندر","68","64","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("KLR650","651 سی‌سی تک سیلندر","40","50","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("KLX300","292 سی‌سی تک سیلندر","28","26","دنده‌ای 6 سرعته","ترمز دیسکی,چراغ LED");
+addVehicle("Z400","399 سی‌سی 2 سیلندر","45","38","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("W800","773 سی‌سی 2 سیلندر","47","62","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("S1000RR","999 سی‌سی 4 سیلندر","207","113","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر,کلاچ لغزشی");
+addVehicle("R1250GS","1250 سی‌سی 2 سیلندر","136","143","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل,کیسه هوای محافظ");
+addVehicle("R nineT","1170 سی‌سی 2 سیلندر","110","116","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("F850GS","853 سی‌سی 2 سیلندر","95","92","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("K1600GT","1649 سی‌سی 6 سیلندر","160","175","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل,سیستم صوتی");
+addVehicle("G310R","313 سی‌سی تک سیلندر","34","28","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("F750GS","853 سی‌سی 2 سیلندر","77","83","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("R18","1802 سی‌سی 2 سیلندر","91","158","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,کروز کنترل");
+addVehicle("C400X","350 سی‌سی تک سیلندر","34","35","اتوماتیک CVT","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,کنترل کشش");
+addVehicle("K1600B","1649 سی‌سی 6 سیلندر","160","175","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل,سیستم صوتی");
+addVehicle("Monster 821","821 سی‌سی 2 سیلندر","109","86","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کلاچ لغزشی");
+addVehicle("Panigale V4","1103 سی‌سی V4","214","124","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر,کلاچ لغزشی");
+addVehicle("Scrambler 800","803 سی‌سی 2 سیلندر","73","66","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Multistrada V4","1158 سی‌سی V4","170","125","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Streetfighter V4","1103 سی‌سی V4","208","123","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("Supersport 950","937 سی‌سی 2 سیلندر","110","93","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Diavel 1260","1262 سی‌سی 2 سیلندر","159","129","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("X Diavel","1262 سی‌سی 2 سیلندر","159","129","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Hypermotard 950","937 سی‌سی 2 سیلندر","114","96","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("SuperSport S","937 سی‌سی 2 سیلندر","110","93","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("RSV4","1099 سی‌سی V4","217","122","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("Tuono V4","1077 سی‌سی V4","175","121","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("RS 660","659 سی‌سی 2 سیلندر","100","67","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("Tuono 660","659 سی‌سی 2 سیلندر","95","67","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Shiver 900","896 سی‌سی 2 سیلندر","95","90","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Dorsoduro 900","896 سی‌سی 2 سیلندر","95","90","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Caponord 1200","1197 سی‌سی V2","128","115","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("SR GT 200","174 سی‌سی تک سیلندر","18","17","اتوماتیک CVT","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("SX 125","125 سی‌سی تک سیلندر","15","12","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("RX 125","125 سی‌سی تک سیلندر","15","12","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("Street Triple","765 سی‌سی 3 سیلندر","118","77","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("Speed Triple","1050 سی‌سی 3 سیلندر","148","117","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("Tiger 900","888 سی‌سی 3 سیلندر","94","87","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Bonneville T120","1200 سی‌سی 2 سیلندر","80","105","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,کروز کنترل");
+addVehicle("Thruxton RS","1200 سی‌سی 2 سیلندر","103","112","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Scrambler 1200","1200 سی‌سی 2 سیلندر","89","110","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Rocket 3","2500 سی‌سی 3 سیلندر","167","221","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Trident 660","660 سی‌سی 3 سیلندر","81","64","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Tiger 850","888 سی‌سی 3 سیلندر","85","82","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Speed Twin","1200 سی‌سی 2 سیلندر","97","112","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Sportster S","1252 سی‌سی V2","121","127","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش");
+addVehicle("Fat Boy","1868 سی‌سی V2","85","155","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Road Glide","1868 سی‌سی V2","85","155","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم صوتی");
+addVehicle("Street Glide","1868 سی‌سی V2","85","155","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم صوتی");
+addVehicle("Softail Standard","1746 سی‌سی V2","70","145","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Heritage Classic","1868 سی‌سی V2","85","155","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Pan America","1252 سی‌سی V2","150","128","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("Iron 883","883 سی‌سی V2","50","68","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("Forty-Eight","1202 سی‌سی V2","60","96","دنده‌ای 5 سرعته","ABS,چراغ LED,ترمز دیسکی");
+addVehicle("Low Rider S","1868 سی‌سی V2","85","155","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("Duke 390","373 سی‌سی تک سیلندر","44","37","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر رنگی TFT,کلاچ لغزشی");
+addVehicle("1290 Super Duke R","1301 سی‌سی V2","180","140","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی برمبو,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("890 Duke R","889 سی‌سی 2 سیلندر","121","99","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کوییک شیفتر");
+addVehicle("790 Adventure","799 سی‌سی 2 سیلندر","95","88","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال,سیستم کنترل کشش,کروز کنترل");
+addVehicle("250 Duke","248 سی‌سی تک سیلندر","30","24","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر دیجیتال");
+addVehicle("450 Rally","449 سی‌سی تک سیلندر","63","49","دنده‌ای 6 سرعته","ترمز دیسکی,سیستم تعلیق");
+addVehicle("690 Enduro","693 سی‌سی تک سیلندر","73","73","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,سیستم تعلیق");
+addVehicle("350 EXC-F","349 سی‌سی تک سیلندر","36","32","دنده‌ای 6 سرعته","ترمز دیسکی,سیستم تعلیق");
+addVehicle("500 EXC-F","510 سی‌سی تک سیلندر","58","48","دنده‌ای 6 سرعته","ترمز دیسکی,سیستم تعلیق");
+addVehicle("RC390","373 سی‌سی تک سیلندر","44","37","دنده‌ای 6 سرعته","ABS,چراغ LED,ترمز دیسکی,نمایشگر رنگی TFT");
+
+// ============================================================
+// ==================== لیست برندها ====================
+// ============================================================
+
+const carBrands = [
+    {n:"ایران خودرو", c:"🇮🇷", m:["سمند","سمند LX","دنا","دنا پلاس توربو","تارا V1","تارا V2","تارا V3","تارا V4"]},
+    {n:"سایپا", c:"🇮🇷", m:["پراید","پراید ۱۱۱","تیبا","ساینا","کوییک","شاهین"]},
+    {n:"بهمن موتور", c:"🇮🇷", m:["ریسپکت","فیدلیتی","دیگنیتی","بستیون T77","بستیون T99","مزدا ۳ (بهمن)","مزدا ۲ (بهمن)","مزدا ۶ (بهمن)","نیسان ماکسیما","نیسان تیانا","نیسان جوک","نیسان قشقایی"]},
+    {n:"کی ام سی", c:"🇮🇷", m:["KMC T8","KMC T9","KMC J7","KMC J4","KMC K7","KMC K5","KMC K8","KMC X5"]},
+    {n:"مدیران خودرو", c:"🇮🇷", m:["ام‌وی‌ام X22","ام‌وی‌ام X33","ام‌وی‌ام X55","اس‌وی‌ام X5","اس‌وی‌ام X7","اس‌وی‌ام X9"]},
+    {n:"کرمان موتور", c:"🇮🇷", m:["جک J4","جک J5","جک S3","جک S5","جک S7","جک T8","جک T9"]},
+    {n:"لیفان", c:"🇨🇳", m:["X50","X60","X70","720","820","T80","M7","S1","X30","C30"]},
+    {n:"سانگ یانگ", c:"🇰🇷", m:["تایوان","رکستون","کوراندو","تیوولی","موسو","اکتیون","کایران","رودینوس"]},
+    {n:"BMW", c:"🇩🇪", m:["X5","X3","X7","M3","M4","M5","M8","i4"]},
+    {n:"مرسدس بنز", c:"🇩🇪", m:["C200","S500","GLC","G-Wagon","E200","E63","CLA","CLS"]},
+    {n:"آئودی", c:"🇩🇪", m:["A3","A4","Q5","R8","A5","A6","A7","Q7"]},
+    {n:"تویوتا", c:"🇯🇵", m:["کمری","کرولا","لندکروزر","سوپرا","پریوس","هایلوکس","فورچونر","هایس"]},
+    {n:"نیسان", c:"🇯🇵", m:["آلتیما","جوک","پاترول","GT-R","سنترا","مورانو","ایکس‌تریل","آرمادا"]},
+    {n:"مزدا", c:"🇯🇵", m:["مزدا ۳","مزدا ۶","CX-5","مزدا ۲","CX-3","CX-9","MX-5","CX-30"]},
+    {n:"هیوندای", c:"🇰🇷", m:["سانتافه","النترا","سوناتا","توسان","i10","i20","i30","پالیسید"]},
+    {n:"کیا", c:"🇰🇷", m:["اسپورتیج","سراتو","اپتیما","سورنتو","پیکانتو","ریو","استینگر","تلوراید"]},
+    {n:"جنسیس", c:"🇰🇷", m:["G70","G80","GV80","G90","GV70","G80 اسپورت","GV60","الکتریفاید G80"]},
+    {n:"هوندا", c:"🇯🇵", m:["سیویک","سیویک تایپ R","آکورد","CR-V","HR-V","پایلوت","پاسپورت","ریج‌لاین"]},
+    {n:"میتسوبیشی", c:"🇯🇵", m:["لنسر","آوتلندر","پاجرو","اکلیپس کراس","اسپورت","ASX","لنسر اسپورتبک","میراژ"]},
+    {n:"مازراتی", c:"🇮🇹", m:["گیبلی","لوانته","مک۲۰","کواتروپورته","گرنتوریسمو","گرن‌کابریو","MC12","MC20"]},
+    {n:"آلفارومئو", c:"🇮🇹", m:["جولیا","جولیا کوادروفولیو","استلویو","تونیاله","۴سی","می‌تو","۸سی","جولیا TZ2"]},
+    {n:"پژو", c:"🇫🇷", m:["۲۰۸","۳۰۸","۵۰۸","۲۰۰۸","۳۰۰۸","۴۰۸","۵۰۰۸","۱۰۰۷"]},
+    {n:"فورد", c:"🇺🇸", m:["فوکوس","موستانگ","اکسپلورر","اف-۱۵۰","فیستا","موندئو","برونکو","مستنگ GT"]},
+    {n:"شورولت", c:"🇺🇸", m:["کامارو","کروت","اکویناکس","سابربن","تاهو","مالیبو","اسپارک","تراورس"]},
+    {n:"جیپ", c:"🇺🇸", m:["رنگلر","گرند چروکی","کامپس","چروکی","رنگلر آنلیمیتد","گلادیاتور","ریس","کمانچی"]},
+    {n:"کادیلاک", c:"🇺🇸", m:["CT5","اسکالید","CT4","XT5","XT6","CT6","XT4","ELR"]},
+    {n:"جگوار", c:"🇬🇧", m:["F-Pace","I-Pace","F-Type","XE","XF","E-Pace","XJ","C-X75"]},
+    {n:"لندروور", c:"🇬🇧", m:["ایواک","اسپورت","رنج روور","دیفندر","ولار","دیسکاوری","ایس","فریلندر"]},
+    {n:"رولزرویس", c:"🇬🇧", m:["فانتوم","کالینان","گوست","راید","دوون","اسپکتر","سویپت","افانتوم کروم"]},
+    {n:"داج", c:"🇺🇸", m:["چلنجر","چلنجر هلکیت","چارجر","دورانگو","چارجر هلکیت","مگنوم","نیترو","ویپر"]},
+    {n:"استون مارتین", c:"🇬🇧", m:["DB11","DBS","ونتیج","رپید","والکیری","ونکویش","سیگنت","DBS V12"]},
+    {n:"مکلارن", c:"🇬🇧", m:["۷۲۰S","سنا","آرتورا","۶۰۰LT","۵۷۰S","۶۵۰S","GT","SPEEDTAIL"]}
+];
+
+const motorcycleBrands = [
+    {n:"هوندا", c:"🇯🇵", m:["CBR500R","CBR650R","CBR1000RR","Africa Twin","CB500X","CB650R","Gold Wing","Rebel 500","CRF450R","NC750X","X-ADV","Monkey","Grom","Super Cub","CB125R","CBR250RR","CRF300L","Forza 750","CG125","CB125","CB250","CB1300"]},
+    {n:"یاماها", c:"🇯🇵", m:["MT-07","MT-09","YZF-R1","YZF-R6","Tenere 700","XSR700","XT250","VMAX","Bolt","Tracer 9","Niken"]},
+    {n:"سوزوکی", c:"🇯🇵", m:["GSX-R1000","GSX-R600","SV650","V-Strom 650","Boulevard M109R","DR-Z400","GSX-S750","Hayabusa","Katana","Bandit"]},
+    {n:"کاوازاکی", c:"🇯🇵", m:["Ninja 400","Ninja ZX-6R","ZX-10R","Ninja 650","Z900","Vulcan S","Versys 650","KLR650","KLX300","Z400","W800"]},
+    {n:"بی ام و", c:"🇩🇪", m:["S1000RR","R1250GS","R nineT","F850GS","K1600GT","G310R","F750GS","R18","C400X","K1600B"]},
+    {n:"دوکاتی", c:"🇮🇹", m:["Monster 821","Panigale V4","Scrambler 800","Multistrada V4","Streetfighter V4","Supersport 950","Diavel 1260","X Diavel","Hypermotard 950","SuperSport S"]},
+    {n:"آپریلیا", c:"🇮🇹", m:["RSV4","Tuono V4","RS 660","Tuono 660","Shiver 900","Dorsoduro 900","Caponord 1200","SR GT 200","SX 125","RX 125"]},
+    {n:"تریومف", c:"🇬🇧", m:["Street Triple","Speed Triple","Tiger 900","Bonneville T120","Thruxton RS","Scrambler 1200","Rocket 3","Trident 660","Tiger 850","Speed Twin"]},
+    {n:"هارلی-دیویدسن", c:"🇺🇸", m:["Sportster S","Fat Boy","Road Glide","Street Glide","Softail Standard","Heritage Classic","Pan America","Iron 883","Forty-Eight","Low Rider S"]},
+    {n:"کی تی ام", c:"🇦🇹", m:["Duke 390","1290 Super Duke R","890 Duke R","790 Adventure","250 Duke","450 Rally","690 Enduro","350 EXC-F","500 EXC-F","RC390"]}
+];
+
+// ============================================================
+// ==================== ساخت لیست ====================
+// ============================================================
+
+let vehicles = [];
+let id = 1;
+
+function getVehicleInfo(modelName) {
+    if(vehicleDB[modelName]) return vehicleDB[modelName];
+    return null;
+}
+
+for(let b of carBrands){
+    for(let m of b.m){
+        let data = getVehicleInfo(m);
+        let optionsList = data ? data.options.split(',') : ["کیسه هوا","ABS","EBD","کروز کنترل"];
+        let img = getImg(m);
+        vehicles.push({
+            id:id++, name:m, brand:b.n, type:"car", country:b.c,
+            engine:data ? data.engine : "در حال دریافت...", 
+            power:data ? data.power : "؟", 
+            torque:data ? data.torque : "؟",
+            transmission:data ? data.trans : "دنده‌ای", 
+            fuel:"بنزین", speed:"۱۸۰", weight:"۱۲۰۰",
+            desc: `${m} – ${data ? data.power : "در حال دریافت"} اسب بخار`,
+            image: img, options:optionsList,
+            fullSpecs: data ? `موتور: ${data.engine}\nقدرت: ${data.power} اسب بخار\nگشتاور: ${data.torque} نیوتن متر\nگیربکس: ${data.trans}\nآپشن‌ها: ${data.options}` : "در حال دریافت اطلاعات دقیق...",
+            wikiLoaded:true, updating:false
+        });
+    }
+}
+
+for(let b of motorcycleBrands){
+    for(let m of b.m){
+        let data = getVehicleInfo(m);
+        let optionsList = data ? data.options.split(',') : ["ABS","ترمز دیسکی","چراغ LED"];
+        let img = getImg(m);
+        vehicles.push({
+            id:id++, name:m, brand:b.n, type:"motorcycle", country:b.c,
+            engine:data ? data.engine : "در حال دریافت...", 
+            power:data ? data.power : "؟", 
+            torque:data ? data.torque : "؟",
+            transmission:data ? data.trans : "دنده‌ای 6 سرعته", 
+            fuel:"بنزین سوپر", speed:"۱۸۰", weight:"۲۰۰",
+            desc: `${m} – ${data ? data.power : "در حال دریافت"} اسب بخار`,
+            image: img, options:optionsList,
+            fullSpecs: data ? `موتور: ${data.engine}\nقدرت: ${data.power} اسب بخار\nگشتاور: ${data.torque} نیوتن متر\nگیربکس: ${data.trans}\nآپشن‌ها: ${data.options}` : "در حال دریافت اطلاعات دقیق...",
+            wikiLoaded:true, updating:false
+        });
+    }
+}
+
+// ============================================================
+// ==================== کدهای اصلی سایت ====================
+// ============================================================
+
+let currentType = "car", currentBrand = "", currentSearch = "", compareList = [];
+
+function showToast(msg){
+    let t=document.createElement('div');
+    t.innerText=msg;
+    t.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) scale(0.8);background:#1e293b;color:white;padding:8px 20px;border-radius:40px;z-index:500;font-size:13px;box-shadow:0 8px 20px rgba(0,0,0,0.2);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);";
+    document.body.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='1'; t.style.transform='translateX(-50%) scale(1)'; },10);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-50%) scale(0.8)'; setTimeout(()=>t.remove(),300); },2500);
+}
+
+function getFilteredData(){
+    let f = vehicles.filter(v=>v.type===currentType);
+    if(currentSearch) f = f.filter(v=>v.name.includes(currentSearch)||v.brand.includes(currentSearch));
+    if(currentBrand) f = f.filter(v=>v.brand===currentBrand);
+    return f;
+}
+
+function getUniqueBrands(){ return [...new Set(getFilteredData().map(v=>v.brand))]; }
+
+function renderBrands(){
+    let brands = getUniqueBrands();
+    let total = getFilteredData().length;
+    document.getElementById('brandsContainer').innerHTML = `<div class="brand-btn ${!currentBrand?'active':''}" onclick="filterByBrand('')">همه برندها (${total} مدل)</div>` +
+    brands.map(b => `<div class="brand-btn ${currentBrand===b?'active':''}" onclick="filterByBrand('${b}')">${b}</div>`).join('');
+    let carCnt = vehicles.filter(v=>v.type==='car').length;
+    let motoCnt = vehicles.filter(v=>v.type==='motorcycle').length;
+    document.getElementById('statsBar').innerHTML = `${vehicles.length} مدل | ${brands.length} برند`;
+    document.getElementById('footer').innerHTML = `خودروبین | بانک اطلاعات فنی خودرو و موتورسیکلت`;
+}
+
+window.filterByBrand = function(b){ currentBrand=b; renderBrands(); renderVehicles(); };
+
+function renderVehicles(){
+    let data = getFilteredData();
+    let grid = document.getElementById('vehiclesGrid');
+    if(data.length===0){ grid.innerHTML=`<div style="text-align:center;padding:50px;animation:fadeIn 0.3s ease;">هیچ مدلی یافت نشد</div>`; return; }
+    grid.innerHTML = data.map(v => `
+    <div class="vehicle-card">
+    <div class="card-image"><img src="${v.image}" alt="${v.name}" loading="lazy" onerror="this.src='https://placehold.co/600x400/2563eb/white?text=${encodeURIComponent(v.name)}'"></div>
+    <div class="card-info">
+    <div class="card-brand">${v.brand} <span class="card-flag">${v.country}</span> <span class="wiki-badge">کامل</span></div>
+    <div class="card-title" onclick="showDetail(${v.id})">${v.name}</div>
+    <div class="card-specs"><span>${v.power} اسب بخار</span><span>${v.engine.split(' ')[0]}</span></div>
+    <div class="card-desc" onclick="showDetail(${v.id})">${v.desc.substring(0,80)}...</div>
+    <button class="compare-btn" onclick="event.stopPropagation(); addToCompare(${v.id})">افزودن به مقایسه</button>
+    </div>
+    </div>
+    `).join('');
+}
+
+window.addToCompare = function(id){
+    let v = vehicles.find(x=>x.id===id);
+    if(!v) return;
+    if(compareList.some(x=>x.id===id)){ showToast('قبلاً اضافه شد'); return; }
+    if(compareList.length>=2){ showToast('حداکثر ۲ خودرو'); return; }
+    compareList.push(v);
+    updateComparePanel();
+    showToast(`${v.name} اضافه شد`);
+};
+
+window.removeFromCompare = function(id){
+    compareList = compareList.filter(x=>x.id!==id);
+    updateComparePanel();
+    showToast('حذف شد');
+};
+
+function updateComparePanel(){
+    let panel = document.getElementById('comparePanel');
+    let items = document.getElementById('compareItemsList');
+    let btn = document.getElementById('compareFinalBtn');
+    if(compareList.length===0){ panel.classList.remove('active'); return; }
+    panel.classList.add('active');
+    items.innerHTML = compareList.map(v => `<div class="compare-item-card"><span><strong>${v.name}</strong><br><small>${v.brand}</small></span><button class="remove-compare" onclick="removeFromCompare(${v.id})">✕</button></div>`).join('');
+    btn.disabled = compareList.length!==2;
+}
+
+window.showCompareModal = function(){
+    if(compareList.length!==2) return;
+    let [a,b]=compareList;
+    document.getElementById('compareTable').innerHTML = `<table class="compare-table">
+    <tr><th>مشخصات</th><th>${a.name}</th><th>${b.name}</th></tr>
+    <tr><td style="font-weight:700;">برند</td><td>${a.brand} ${a.country}</td><td>${b.brand} ${b.country}</td></tr>
+    <tr><td style="font-weight:700;">پیشرانه</td><td>${a.engine}</td><td>${b.engine}</td></tr>
+    <tr><td style="font-weight:700;">قدرت</td><td>${a.power} اسب بخار</td><td>${b.power} اسب بخار</td></tr>
+    <tr><td style="font-weight:700;">گشتاور</td><td>${a.torque} نیوتن متر</td><td>${b.torque} نیوتن متر</td></tr>
+    <tr><td style="font-weight:700;">گیربکس</td><td>${a.transmission}</td><td>${b.transmission}</td></tr>
+    <tr><td style="font-weight:700;">سوخت</td><td>${a.fuel}</td><td>${b.fuel}</td></tr>
+    <tr><td style="font-weight:700;">حداکثر سرعت</td><td>${a.speed} km/h</td><td>${b.speed} km/h</td></tr>
+    <tr><td style="font-weight:700;">وزن</td><td>${a.weight} kg</td><td>${b.weight} kg</td></tr>
+    </table>`;
+    document.getElementById('compareModal').classList.add('active');
+};
+
+window.closeCompareModal = ()=>document.getElementById('compareModal').classList.remove('active');
+document.getElementById('compareFinalBtn').addEventListener('click', showCompareModal);
+
+window.showDetail = function(id){
+    let v = vehicles.find(x=>x.id===id);
+    if(!v) return;
+    let optionsRows = (v.options || []).map((opt, idx) => `<tr><td style="padding:10px;">${idx+1}</td><td style="padding:10px;">${opt}</td></tr>`).join('');
+    document.getElementById('detailContent').innerHTML = `
+    <div class="detail-header">
+    <img src="${v.image}" alt="${v.name}" onerror="this.src='https://placehold.co/200x200/2563eb/white?text=${encodeURIComponent(v.name)}'">
+    <div class="detail-flag">${v.country}</div>
+    <div class="detail-name">${v.name}</div>
+    <div class="detail-brand">${v.brand}</div>
+    </div>
+    <div class="detail-body">
+    <div class="specs-grid">
+    <div class="spec-item"><div class="spec-label">پیشرانه</div><div class="spec-value">${v.engine}</div></div>
+    <div class="spec-item"><div class="spec-label">قدرت</div><div class="spec-value">${v.power} اسب بخار</div></div>
+    <div class="spec-item"><div class="spec-label">گشتاور</div><div class="spec-value">${v.torque} نیوتن متر</div></div>
+    <div class="spec-item"><div class="spec-label">گیربکس</div><div class="spec-value">${v.transmission}</div></div>
+    <div class="spec-item"><div class="spec-label">سوخت</div><div class="spec-value">${v.fuel}</div></div>
+    <div class="spec-item"><div class="spec-label">حداکثر سرعت</div><div class="spec-value">${v.speed} km/h</div></div>
+    <div class="spec-item"><div class="spec-label">وزن</div><div class="spec-value">${v.weight} kg</div></div>
+    </div>
+    <h3 style="margin:20px 0 12px;">آپشن‌ها و امکانات</h3>
+    <table class="options-table">
+    <thead><tr style="background:#1e293b;color:white;"><th style="padding:12px;">#</th><th style="padding:12px;">آپشن</th></tr></thead>
+    <tbody>${optionsRows}</tbody>
+    </table>
+    <div class="full-specs"><strong>مشخصات فنی کامل</strong><br><br>${v.fullSpecs}</div>
+    <button class="close-btn" onclick="closeDetail()">بازگشت به لیست</button>
+    </div>
+    `;
+    document.getElementById('detailModal').classList.add('active');
+};
+
+window.closeDetail = ()=>document.getElementById('detailModal').classList.remove('active');
+document.getElementById('detailModal').addEventListener('click', e=>{if(e.target===document.getElementById('detailModal')) closeDetail();});
+
+document.getElementById('searchInput').addEventListener('input', e=>{currentSearch=e.target.value; renderBrands(); renderVehicles();});
+document.querySelectorAll('.nav-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+        document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        currentType=tab.dataset.type;
+        currentBrand="";
+        renderBrands();
+        renderVehicles();
+    });
+});
+
+renderBrands();
+renderVehicles();
+showToast(`${vehicles.length} مدل بارگذاری شد`);
+</script>
+</body>
+</html>
